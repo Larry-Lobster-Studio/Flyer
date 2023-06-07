@@ -1,0 +1,3 @@
+function(ctx) { 
+    all: ctx
+}

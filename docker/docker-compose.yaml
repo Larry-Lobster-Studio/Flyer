@@ -1,0 +1,99 @@
+version: '3.7'
+
+services:
+  # postgres:
+  #   image: postgres:15.3
+  #   container_name: flyer-postgres
+  #   environment:
+  #     - POSTGRES_PASSWORD=postgres
+  #     - POSTGRES_USER=postgres
+  #   restart: unless-stopped
+  #   ports:
+  #     - 5432:5432
+
+  kratos-migrate:
+    image: oryd/kratos:v0.13.0
+    container_name: flyer-kratos-migrate
+    # depends_on:
+    #   - postgres
+    restart: on-failure
+    command: -c /etc/config/kratos/kratos.yml migrate sql -e --yes
+    environment:
+      - DSN=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_URL}:${POSTGRES_PORT}/${POSTGRES_DB}?search_path=${POSTGRES_SCHEMA}&sslmode=prefer&max_conns=20&max_idle_conns=4
+    volumes:
+      - type: bind
+        source: ${KRATOS_DATA}
+        target: /etc/config/kratos
+
+  kratos:
+    image: oryd/kratos:v0.13.0
+    container_name: flyer-kratos
+    depends_on:
+      - kratos-migrate
+      # - postgres
+    restart: unless-stopped
+    command: serve -c /etc/config/kratos/kratos.yml --dev --watch-courier
+    ports:
+      - 4433:4433 # public
+      - 4434:4434 # admin
+    environment:
+      - DSN=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_URL}:${POSTGRES_PORT}/${POSTGRES_DB}?search_path=${POSTGRES_SCHEMA}&sslmode=prefer&max_conns=20&max_idle_conns=4
+      - LOG_LEVEL=trace
+    volumes:
+      - type: bind
+        source: ${KRATOS_DATA}
+        target: /etc/config/kratos
+
+  # cerbos:
+  #   image: ghcr.io/cerbos/cerbos:latest
+  #   container_name: flyer-cerbos
+  #   restart: unless-stopped
+  #   command: server --config=/config/config.yaml
+  #   ports:
+  #     - 3592:3592
+  #     - 3593:3593
+  #   volumes:
+  #     - type: bind
+  #       source: ${CERBOS_CONFIG}
+  #       target: /config
+  #     - type: bind
+  #       source: ${CERBOS_POLICIES}
+  #       target: /policies
+
+  gotenberg:
+    image: gotenberg/gotenberg:7
+    container_name: flyer-gotenberg
+    restart: unless-stopped
+    ports:
+      - 9893:3000
+
+  # clamav:
+  #   image: clamav/clamav:stable
+  #   container_name: flyer-clamav
+  #   environment:
+  #     - CLAMD_CONF_MaxFileSize=250M
+  #     - CLAMD_CONF_MaxScanSize=250M
+  #   restart: unless-stopped
+  #   ports:
+  #     - 9310:3310
+  #   volumes:
+  #     - type: bind
+  #       source: ${CLAMAV_DATA}
+  #       target: /var/lib/clamav
+
+  # meilisearch:
+  #   image: getmeili/meilisearch:v1.0
+  #   container_name: flyer-meilisearch
+  #   environment:
+  #     - MEILI_ENV=development
+  #     # - MEILI_MASTER_KEY=MEILI_MASTER_KEY
+  #   restart: unless-stopped
+  #   ports:
+  #     - 9700:7700
+  #   volumes:
+  #     - type: bind
+  #       source: ${MEILI_DATA}
+  #       target: /meili_data
+
+
+

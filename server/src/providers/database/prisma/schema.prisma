@@ -1,0 +1,354 @@
+generator client {
+    provider        = "prisma-client-js"
+    previewFeatures = ["jsonProtocol", "fullTextSearch", "orderByNulls", "filteredRelationCount", "views"]
+}
+
+generator json {
+    provider  = "prisma-json-types-generator"
+    namespace = "PrismaJson"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    id         String @id
+    company_id String
+
+    first_name String
+    last_name  String
+
+    email String  @unique
+    phone String?
+
+    avatar  File?   @relation("avatar")
+    company Company @relation(fields: [company_id], references: [id])
+
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+}
+
+model Company {
+    id    String  @id
+    name  String
+    phone String?
+
+    address  Address?
+    invoices Invoice[]
+    expenses Expense[]
+    items    Item[]
+    terms    Term[]
+    settings CompanySettings?
+    contacts Contact[]
+    users    User[]
+    logo     File?            @relation("logo")
+
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+}
+
+model CompanySettings {
+    id         String @id @default(cuid())
+    company_id String @unique
+
+    currency          String  @default("EUR")
+    time_zone         String  @default("Europe/Brussels")
+    language          String  @default("be-NL")
+    date_format       String  @default("dd/MM/yyy")
+    fiscal_year       String  @default("1-12")
+    tax_per_item      Boolean @default(true)
+    discount_per_item Boolean @default(false)
+    invoice_format    String  @default("{{SERIES:INV}}{{DELIMITER:-}}{{SEQUENCE:6}}")
+    default_template  String?
+    templates         File[]
+
+    company Company @relation(fields: [company_id], references: [id])
+}
+
+model Note {
+    id String @id @default(cuid())
+
+    name String
+    note String
+
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+}
+
+model Contact {
+    id         String @id
+    company_id String
+
+    name    String
+    email   String
+    phone   String?
+    website String?
+
+    vat String
+
+    billing_address  Address? @relation("billing_address")
+    shipping_address Address? @relation("shipping_address")
+
+    invoices Invoice[]
+    expenses Expense[]
+    company  Company   @relation(fields: [company_id], references: [id])
+
+    metadata Json?
+
+    archived_at DateTime?
+    created_at  DateTime  @default(now())
+    updated_at  DateTime  @updatedAt
+}
+
+model Address {
+    id                  String  @id @default(cuid())
+    company_id          String? @unique
+    contact_billing_id  String? @unique
+    contact_shipping_id String? @unique
+
+    name String?
+
+    line_1      String
+    line_2      String?
+    city        String
+    postal_code String
+    state       String?
+    country     String  @default("BE")
+    geo         Json
+
+    company          Company? @relation(fields: [company_id], references: [id])
+    contact_billing  Contact? @relation("billing_address", fields: [contact_billing_id], references: [id])
+    contact_shipping Contact? @relation("shipping_address", fields: [contact_shipping_id], references: [id])
+
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+}
+
+enum InvoiceStatus {
+    DISPUTED
+    DRAFT
+    SENT
+    VIEWED
+    OVERDUE
+    PARTIALLY_PAID
+    PAID
+    FAILED
+}
+
+model Invoice {
+    id String @id
+
+    contact_id       String
+    company_id       String
+    invoice_number   String
+    reference_number String?
+
+    status   InvoiceStatus @default(DRAFT)
+    currency String
+
+    /// [DineroType]
+    tax_amount         Json
+    /// [DineroType]
+    sub_total          Json
+    /// [DineroType]
+    total              Json
+    /// [DineroType]
+    discount_total     Json?
+    /// [DineroType]
+    paid_amount        Json
+    /// [DineroType]
+    outstanding_amount Json
+
+    notes    String?
+    terms    String?
+    metadata Json?
+
+    invoice_date DateTime
+    due_date     DateTime
+    paid_date    DateTime?
+
+    items    InvoiceItem[]
+    payments InvoicePayment[]
+    document File?            @relation("invoice")
+
+    contact Contact @relation(fields: [contact_id], references: [id])
+    company Company @relation(fields: [company_id], references: [id])
+
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+
+    @@unique([company_id, invoice_number])
+}
+
+model InvoiceItem {
+    id         String @id @default(cuid())
+    invoice_id String
+
+    name        String
+    /// [DineroType]
+    price       Json
+    description String?
+    metadata    Json?
+
+    quantity Json
+
+    tax        Json
+    /// [DineroType]
+    tax_amount Json
+    /// [DineroType]
+    sub_total  Json
+    /// [DineroType]
+    total      Json
+
+    invoice Invoice @relation(fields: [invoice_id], references: [id])
+
+    created_at DateTime @default(now())
+}
+
+model InvoicePayment {
+    id         String @id @default(cuid())
+    invoice_id String
+
+    /// [DineroType]
+    amount    Json
+    method    String
+    reference String?
+
+    note     String?
+    metadata Json?
+
+    invoice Invoice @relation(fields: [invoice_id], references: [id])
+
+    paid_at    DateTime
+    created_at DateTime @default(now())
+}
+
+model Item {
+    id         String @id @default(cuid())
+    company_id String
+
+    name        String
+    /// [DineroType]
+    price       Json
+    /// [DineroType]
+    discount    Json?
+    description String?
+    metadata    Json?
+
+    tax  Json
+    unit String
+    sku  String?
+
+    company Company @relation(fields: [company_id], references: [id])
+
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+}
+
+model Term {
+    id         String @id @default(cuid())
+    company_id String
+
+    data String
+
+    company Company @relation(fields: [company_id], references: [id])
+
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+}
+
+enum ExpenseStatus {
+    DISPUTED
+    OVERDUE
+    UNPAID
+    PARTIALLY_PAID
+    PAID
+    FAILED
+}
+
+model Expense {
+    id         String @id
+    contact_id String
+    company_id String
+
+    reference_number String?
+    status           ExpenseStatus @default(UNPAID)
+    currency         String
+
+    /// [DineroType]
+    tax_amount         Json
+    /// [DineroType]
+    sub_total          Json
+    /// [DineroType]
+    total              Json
+    /// [DineroType]
+    discount_total     Json?
+    /// [DineroType]
+    paid_amount        Json
+    /// [DineroType]
+    outstanding_amount Json
+
+    notes    String?
+    terms    String?
+    metadata Json?
+
+    expense_date DateTime
+    due_date     DateTime?
+    paid_date    DateTime?
+
+    items    ExpenseItem[]
+    document File?         @relation("expense")
+
+    contact Contact @relation(fields: [contact_id], references: [id])
+    company Company @relation(fields: [company_id], references: [id])
+
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+}
+
+model ExpenseItem {
+    id         String @id @default(cuid())
+    expense_id String
+
+    category    String
+    description String?
+    metadata    Json?
+
+    tax        Json?
+    /// [DineroType]
+    tax_amount Json
+    /// [DineroType]
+    sub_total  Json
+    /// [DineroType]
+    total      Json
+
+    expense Expense @relation(fields: [expense_id], references: [id])
+
+    created_at DateTime @default(now())
+}
+
+model File {
+    id                  String  @id
+    user_avatar_id      String? @unique
+    invoice_id          String? @unique
+    expense_id          String? @unique
+    company_logo_id     String? @unique
+    company_settings_id String?
+
+    key       String
+    bucket    String
+    file_name String
+    temporary Boolean @default(false)
+
+    user_avatar User?    @relation("avatar", fields: [user_avatar_id], references: [id])
+    invoice     Invoice? @relation("invoice", fields: [invoice_id], references: [id])
+    expense     Expense? @relation("expense", fields: [expense_id], references: [id])
+
+    company_logo     Company?         @relation("logo", fields: [company_logo_id], references: [id])
+    company_settings CompanySettings? @relation(fields: [company_settings_id], references: [id])
+
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+}
