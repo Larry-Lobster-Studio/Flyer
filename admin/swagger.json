@@ -1,0 +1,2839 @@
+{
+	"openapi": "3.0.3",
+	"info": {
+		"title": "Flyer Openapi",
+		"description": "Flyer Openapi version",
+		"version": "1.0.0"
+	},
+	"components": {
+		"securitySchemes": {
+			"cookieAuth": {
+				"type": "apiKey",
+				"in": "cookie",
+				"name": "flyer-session"
+			},
+			"bearerAuth": { "type": "http", "scheme": "bearer" }
+		},
+		"schemas": {}
+	},
+	"paths": {
+		"/v1/company": {
+			"get": {
+				"operationId": "getCompany",
+				"tags": ["company"],
+				"description": "get company",
+				"responses": {
+					"200": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"id": { "type": "string" },
+										"name": { "type": "string" },
+										"phone": { "type": "string", "nullable": true },
+										"logo": {
+											"type": "object",
+											"properties": {
+												"id": { "type": "string" },
+												"file_name": { "type": "string" },
+												"url": { "type": "string" }
+											},
+											"required": ["id", "file_name", "url"],
+											"nullable": true
+										},
+										"address": {
+											"type": "object",
+											"properties": {
+												"id": { "type": "string" },
+												"name": { "type": "string", "nullable": true },
+												"line_1": { "type": "string" },
+												"line_2": { "type": "string", "nullable": true },
+												"city": { "type": "string" },
+												"postal_code": { "type": "string" },
+												"state": { "type": "string", "nullable": true },
+												"country": { "type": "string" },
+												"geo": {}
+											},
+											"required": [
+												"id",
+												"name",
+												"line_1",
+												"line_2",
+												"city",
+												"postal_code",
+												"state",
+												"country",
+												"geo"
+											],
+											"nullable": true
+										}
+									},
+									"required": ["id", "name", "phone", "logo", "address"]
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": { "default": 500, "type": "number" },
+										"error": { "type": "string" },
+										"message": { "type": "string" }
+									},
+									"required": ["status", "message"]
+								}
+							}
+						}
+					}
+				}
+			},
+			"put": {
+				"operationId": "updateCompany",
+				"tags": ["company"],
+				"description": "update new company",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"name": { "type": "string" },
+									"logo": { "type": "string" },
+									"phone": { "type": "string" },
+									"address": {
+										"type": "object",
+										"properties": {
+											"name": { "type": "string" },
+											"line_1": { "type": "string" },
+											"line_2": { "type": "string" },
+											"city": { "type": "string" },
+											"postal_code": { "type": "string" },
+											"state": { "type": "string" },
+											"country": { "type": "string" }
+										},
+										"required": ["line_1", "city", "postal_code", "country"]
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"id": { "type": "string" },
+										"name": { "type": "string" },
+										"phone": { "type": "string", "nullable": true },
+										"logo": {
+											"type": "object",
+											"properties": {
+												"id": { "type": "string" },
+												"file_name": { "type": "string" },
+												"url": { "type": "string" }
+											},
+											"required": ["id", "file_name", "url"],
+											"nullable": true
+										},
+										"address": {
+											"type": "object",
+											"properties": {
+												"id": { "type": "string" },
+												"name": { "type": "string", "nullable": true },
+												"line_1": { "type": "string" },
+												"line_2": { "type": "string", "nullable": true },
+												"city": { "type": "string" },
+												"postal_code": { "type": "string" },
+												"state": { "type": "string", "nullable": true },
+												"country": { "type": "string" },
+												"geo": {}
+											},
+											"required": [
+												"id",
+												"name",
+												"line_1",
+												"line_2",
+												"city",
+												"postal_code",
+												"state",
+												"country",
+												"geo"
+											],
+											"nullable": true
+										}
+									},
+									"required": ["id", "name", "phone", "logo", "address"]
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": { "default": 500, "type": "number" },
+										"error": { "type": "string" },
+										"message": { "type": "string" }
+									},
+									"required": ["status", "message"]
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/v1/company/settings": {
+			"post": {
+				"operationId": "updateCompanySettings",
+				"tags": ["company settings"],
+				"description": "update company settings",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"currency": { "type": "string" },
+									"time_zone": { "type": "string" },
+									"language": { "type": "string" },
+									"date_format": { "type": "string" },
+									"fiscal_year": { "type": "string" },
+									"tax_per_item": { "type": "boolean" },
+									"discount_per_item": { "type": "boolean" },
+									"invoice_format": { "type": "string" }
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"currency": { "type": "string" },
+										"time_zone": { "type": "string" },
+										"language": { "type": "string" },
+										"date_format": { "type": "string" },
+										"fiscal_year": { "type": "string" },
+										"tax_per_item": { "type": "boolean" },
+										"discount_per_item": { "type": "boolean" },
+										"invoice_format": { "type": "string" }
+									},
+									"required": [
+										"currency",
+										"time_zone",
+										"language",
+										"date_format",
+										"fiscal_year",
+										"tax_per_item",
+										"discount_per_item",
+										"invoice_format"
+									]
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": { "default": 500, "type": "number" },
+										"error": { "type": "string" },
+										"message": { "type": "string" }
+									},
+									"required": ["status", "message"]
+								}
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "getCompanySettings",
+				"tags": ["company settings"],
+				"description": "get company settings",
+				"responses": {
+					"200": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"currency": { "type": "string" },
+										"time_zone": { "type": "string" },
+										"language": { "type": "string" },
+										"date_format": { "type": "string" },
+										"fiscal_year": { "type": "string" },
+										"tax_per_item": { "type": "boolean" },
+										"discount_per_item": { "type": "boolean" },
+										"invoice_format": { "type": "string" }
+									},
+									"required": [
+										"currency",
+										"time_zone",
+										"language",
+										"date_format",
+										"fiscal_year",
+										"tax_per_item",
+										"discount_per_item",
+										"invoice_format"
+									]
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": { "default": 500, "type": "number" },
+										"error": { "type": "string" },
+										"message": { "type": "string" }
+									},
+									"required": ["status", "message"]
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/v1/contacts": {
+			"post": {
+				"operationId": "createContact",
+				"tags": ["contact"],
+				"description": "create new contact",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"name": { "type": "string" },
+									"email": { "format": "email", "type": "string" },
+									"phone": { "type": "string" },
+									"website": { "type": "string" },
+									"vat": { "type": "string" },
+									"billing_address": {
+										"type": "object",
+										"properties": {
+											"name": { "type": "string" },
+											"line_1": { "type": "string" },
+											"line_2": { "type": "string" },
+											"city": { "type": "string" },
+											"postal_code": { "type": "string" },
+											"state": { "type": "string" },
+											"country": { "type": "string" }
+										},
+										"required": ["line_1", "city", "postal_code", "country"]
+									},
+									"shipping_address": {
+										"type": "object",
+										"properties": {
+											"name": { "type": "string" },
+											"line_1": { "type": "string" },
+											"line_2": { "type": "string" },
+											"city": { "type": "string" },
+											"postal_code": { "type": "string" },
+											"state": { "type": "string" },
+											"country": { "type": "string" }
+										},
+										"required": ["line_1", "city", "postal_code", "country"]
+									}
+								},
+								"required": ["name", "email", "vat"]
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"201": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"id": { "type": "string" },
+										"name": { "type": "string" },
+										"email": { "type": "string" },
+										"phone": { "type": "string", "nullable": true },
+										"vat": { "type": "string" },
+										"website": { "type": "string", "nullable": true },
+										"billing_address": {
+											"type": "object",
+											"properties": {
+												"id": { "type": "string" },
+												"name": { "type": "string", "nullable": true },
+												"line_1": { "type": "string" },
+												"line_2": { "type": "string", "nullable": true },
+												"city": { "type": "string" },
+												"postal_code": { "type": "string" },
+												"state": { "type": "string", "nullable": true },
+												"country": { "type": "string" },
+												"geo": {}
+											},
+											"required": [
+												"id",
+												"name",
+												"line_1",
+												"line_2",
+												"city",
+												"postal_code",
+												"state",
+												"country",
+												"geo"
+											],
+											"nullable": true
+										},
+										"shipping_address": {
+											"type": "object",
+											"properties": {
+												"id": { "type": "string" },
+												"name": { "type": "string", "nullable": true },
+												"line_1": { "type": "string" },
+												"line_2": { "type": "string", "nullable": true },
+												"city": { "type": "string" },
+												"postal_code": { "type": "string" },
+												"state": { "type": "string", "nullable": true },
+												"country": { "type": "string" },
+												"geo": {}
+											},
+											"required": [
+												"id",
+												"name",
+												"line_1",
+												"line_2",
+												"city",
+												"postal_code",
+												"state",
+												"country",
+												"geo"
+											],
+											"nullable": true
+										}
+									},
+									"required": [
+										"id",
+										"name",
+										"email",
+										"phone",
+										"vat",
+										"website",
+										"billing_address",
+										"shipping_address"
+									]
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": { "default": 500, "type": "number" },
+										"error": { "type": "string" },
+										"message": { "type": "string" }
+									},
+									"required": ["status", "message"]
+								}
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "listContacts",
+				"tags": ["contact"],
+				"description": "list all contacts",
+				"parameters": [
+					{
+						"schema": { "type": "string" },
+						"in": "query",
+						"name": "sort",
+						"required": false
+					},
+					{
+						"schema": { "default": 0, "type": "number" },
+						"in": "query",
+						"name": "page",
+						"required": false
+					},
+					{
+						"schema": { "default": 25, "maximum": 50, "type": "number" },
+						"in": "query",
+						"name": "per_page",
+						"required": false
+					},
+					{
+						"schema": { "type": "string" },
+						"in": "query",
+						"name": "search",
+						"required": false
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"object": { "type": "string" },
+										"has_more": { "type": "boolean" },
+										"total": { "type": "integer" },
+										"items": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"id": { "type": "string" },
+													"name": { "type": "string" },
+													"email": { "type": "string" },
+													"vat": { "type": "string" }
+												},
+												"required": ["id", "name", "email", "vat"]
+											}
+										}
+									},
+									"required": ["object", "has_more", "total", "items"]
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": { "default": 500, "type": "number" },
+										"error": { "type": "string" },
+										"message": { "type": "string" }
+									},
+									"required": ["status", "message"]
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/v1/contacts/{contactId}": {
+			"get": {
+				"operationId": "getContact",
+				"tags": ["contact"],
+				"description": "get contact",
+				"parameters": [
+					{
+						"schema": { "type": "string" },
+						"in": "path",
+						"name": "contactId",
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"id": { "type": "string" },
+										"name": { "type": "string" },
+										"email": { "type": "string" },
+										"phone": { "type": "string", "nullable": true },
+										"vat": { "type": "string" },
+										"website": { "type": "string", "nullable": true },
+										"billing_address": {
+											"type": "object",
+											"properties": {
+												"id": { "type": "string" },
+												"name": { "type": "string", "nullable": true },
+												"line_1": { "type": "string" },
+												"line_2": { "type": "string", "nullable": true },
+												"city": { "type": "string" },
+												"postal_code": { "type": "string" },
+												"state": { "type": "string", "nullable": true },
+												"country": { "type": "string" },
+												"geo": {}
+											},
+											"required": [
+												"id",
+												"name",
+												"line_1",
+												"line_2",
+												"city",
+												"postal_code",
+												"state",
+												"country",
+												"geo"
+											],
+											"nullable": true
+										},
+										"shipping_address": {
+											"type": "object",
+											"properties": {
+												"id": { "type": "string" },
+												"name": { "type": "string", "nullable": true },
+												"line_1": { "type": "string" },
+												"line_2": { "type": "string", "nullable": true },
+												"city": { "type": "string" },
+												"postal_code": { "type": "string" },
+												"state": { "type": "string", "nullable": true },
+												"country": { "type": "string" },
+												"geo": {}
+											},
+											"required": [
+												"id",
+												"name",
+												"line_1",
+												"line_2",
+												"city",
+												"postal_code",
+												"state",
+												"country",
+												"geo"
+											],
+											"nullable": true
+										}
+									},
+									"required": [
+										"id",
+										"name",
+										"email",
+										"phone",
+										"vat",
+										"website",
+										"billing_address",
+										"shipping_address"
+									]
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": { "default": 500, "type": "number" },
+										"error": { "type": "string" },
+										"message": { "type": "string" }
+									},
+									"required": ["status", "message"]
+								}
+							}
+						}
+					}
+				}
+			},
+			"put": {
+				"operationId": "updateContact",
+				"tags": ["contact"],
+				"description": "update contact",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"name": { "type": "string" },
+									"email": { "format": "email", "type": "string" },
+									"phone": { "type": "string" },
+									"website": { "type": "string" },
+									"vat": { "type": "string" },
+									"billing_address": {
+										"type": "object",
+										"properties": {
+											"name": { "type": "string" },
+											"line_1": { "type": "string" },
+											"line_2": { "type": "string" },
+											"city": { "type": "string" },
+											"postal_code": { "type": "string" },
+											"state": { "type": "string" },
+											"country": { "type": "string" }
+										},
+										"required": ["line_1", "city", "postal_code", "country"]
+									},
+									"shipping_address": {
+										"type": "object",
+										"properties": {
+											"name": { "type": "string" },
+											"line_1": { "type": "string" },
+											"line_2": { "type": "string" },
+											"city": { "type": "string" },
+											"postal_code": { "type": "string" },
+											"state": { "type": "string" },
+											"country": { "type": "string" }
+										},
+										"required": ["line_1", "city", "postal_code", "country"]
+									}
+								}
+							}
+						}
+					}
+				},
+				"parameters": [
+					{
+						"schema": { "type": "string" },
+						"in": "path",
+						"name": "contactId",
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"id": { "type": "string" },
+										"name": { "type": "string" },
+										"email": { "type": "string" },
+										"phone": { "type": "string", "nullable": true },
+										"vat": { "type": "string" },
+										"website": { "type": "string", "nullable": true },
+										"billing_address": {
+											"type": "object",
+											"properties": {
+												"id": { "type": "string" },
+												"name": { "type": "string", "nullable": true },
+												"line_1": { "type": "string" },
+												"line_2": { "type": "string", "nullable": true },
+												"city": { "type": "string" },
+												"postal_code": { "type": "string" },
+												"state": { "type": "string", "nullable": true },
+												"country": { "type": "string" },
+												"geo": {}
+											},
+											"required": [
+												"id",
+												"name",
+												"line_1",
+												"line_2",
+												"city",
+												"postal_code",
+												"state",
+												"country",
+												"geo"
+											],
+											"nullable": true
+										},
+										"shipping_address": {
+											"type": "object",
+											"properties": {
+												"id": { "type": "string" },
+												"name": { "type": "string", "nullable": true },
+												"line_1": { "type": "string" },
+												"line_2": { "type": "string", "nullable": true },
+												"city": { "type": "string" },
+												"postal_code": { "type": "string" },
+												"state": { "type": "string", "nullable": true },
+												"country": { "type": "string" },
+												"geo": {}
+											},
+											"required": [
+												"id",
+												"name",
+												"line_1",
+												"line_2",
+												"city",
+												"postal_code",
+												"state",
+												"country",
+												"geo"
+											],
+											"nullable": true
+										}
+									},
+									"required": [
+										"id",
+										"name",
+										"email",
+										"phone",
+										"vat",
+										"website",
+										"billing_address",
+										"shipping_address"
+									]
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": { "default": 500, "type": "number" },
+										"error": { "type": "string" },
+										"message": { "type": "string" }
+									},
+									"required": ["status", "message"]
+								}
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "deleteContact",
+				"tags": ["contact"],
+				"description": "delete contact",
+				"parameters": [
+					{
+						"schema": { "type": "string" },
+						"in": "path",
+						"name": "contactId",
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"id": { "type": "string" },
+										"object": { "type": "string" },
+										"deleted": { "type": "boolean" }
+									},
+									"required": ["id", "object", "deleted"]
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": { "default": 500, "type": "number" },
+										"error": { "type": "string" },
+										"message": { "type": "string" }
+									},
+									"required": ["status", "message"]
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/v1/items": {
+			"post": {
+				"operationId": "createItem",
+				"tags": ["item"],
+				"description": "create new item",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"name": { "type": "string" },
+									"price": { "minimum": 0, "type": "integer" },
+									"description": { "type": "string" },
+									"unit": { "type": "string" },
+									"tax": { "minimum": 0, "type": "number" }
+								},
+								"required": ["name", "price", "unit", "tax"]
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"201": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"id": { "type": "string" },
+										"name": { "type": "string" },
+										"price": { "type": "string" },
+										"description": { "type": "string", "nullable": true },
+										"unit": { "type": "string" },
+										"tax": { "type": "string" }
+									},
+									"required": [
+										"id",
+										"name",
+										"price",
+										"description",
+										"unit",
+										"tax"
+									]
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": { "default": 500, "type": "number" },
+										"error": { "type": "string" },
+										"message": { "type": "string" }
+									},
+									"required": ["status", "message"]
+								}
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "listItems",
+				"tags": ["item"],
+				"description": "list all items",
+				"parameters": [
+					{
+						"schema": { "type": "string" },
+						"in": "query",
+						"name": "sort",
+						"required": false
+					},
+					{
+						"schema": { "default": 0, "type": "number" },
+						"in": "query",
+						"name": "page",
+						"required": false
+					},
+					{
+						"schema": { "default": 25, "maximum": 50, "type": "number" },
+						"in": "query",
+						"name": "per_page",
+						"required": false
+					},
+					{
+						"schema": { "type": "string" },
+						"in": "query",
+						"name": "search",
+						"required": false
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"object": { "type": "string" },
+										"has_more": { "type": "boolean" },
+										"total": { "type": "integer" },
+										"items": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"id": { "type": "string" },
+													"name": { "type": "string" },
+													"price": { "type": "string" },
+													"description": { "type": "string", "nullable": true },
+													"unit": { "type": "string" },
+													"tax": { "type": "string" }
+												},
+												"required": [
+													"id",
+													"name",
+													"price",
+													"description",
+													"unit",
+													"tax"
+												]
+											}
+										}
+									},
+									"required": ["object", "has_more", "total", "items"]
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": { "default": 500, "type": "number" },
+										"error": { "type": "string" },
+										"message": { "type": "string" }
+									},
+									"required": ["status", "message"]
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/v1/items/{itemId}": {
+			"put": {
+				"operationId": "updateItem",
+				"tags": ["item"],
+				"description": "update new item",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"name": { "type": "string" },
+									"price": { "minimum": 0, "type": "integer" },
+									"description": { "type": "string" },
+									"unit": { "type": "string" },
+									"tax": { "minimum": 0, "type": "number" }
+								}
+							}
+						}
+					}
+				},
+				"parameters": [
+					{
+						"schema": { "type": "string" },
+						"in": "path",
+						"name": "itemId",
+						"required": true
+					}
+				],
+				"responses": {
+					"201": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"id": { "type": "string" },
+										"name": { "type": "string" },
+										"price": { "type": "string" },
+										"description": { "type": "string", "nullable": true },
+										"unit": { "type": "string" },
+										"tax": { "type": "string" }
+									},
+									"required": [
+										"id",
+										"name",
+										"price",
+										"description",
+										"unit",
+										"tax"
+									]
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": { "default": 500, "type": "number" },
+										"error": { "type": "string" },
+										"message": { "type": "string" }
+									},
+									"required": ["status", "message"]
+								}
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "getItem",
+				"tags": ["item"],
+				"description": "get item",
+				"parameters": [
+					{
+						"schema": { "type": "string" },
+						"in": "path",
+						"name": "itemId",
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"id": { "type": "string" },
+										"name": { "type": "string" },
+										"price": { "type": "string" },
+										"description": { "type": "string", "nullable": true },
+										"unit": { "type": "string" },
+										"tax": { "type": "string" }
+									},
+									"required": [
+										"id",
+										"name",
+										"price",
+										"description",
+										"unit",
+										"tax"
+									]
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": { "default": 500, "type": "number" },
+										"error": { "type": "string" },
+										"message": { "type": "string" }
+									},
+									"required": ["status", "message"]
+								}
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "deleteItem",
+				"tags": ["item"],
+				"description": "delete item",
+				"parameters": [
+					{
+						"schema": { "type": "string" },
+						"in": "path",
+						"name": "itemId",
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"id": { "type": "string" },
+										"object": { "type": "string" },
+										"deleted": { "type": "boolean" }
+									},
+									"required": ["id", "object", "deleted"]
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": { "default": 500, "type": "number" },
+										"error": { "type": "string" },
+										"message": { "type": "string" }
+									},
+									"required": ["status", "message"]
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/v1/files": {
+			"post": {
+				"tags": ["file"],
+				"description": "Upload new file",
+				"responses": {
+					"200": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"object": { "type": "string" },
+										"id": { "type": "string" }
+									},
+									"required": ["object", "id"]
+								}
+							}
+						}
+					},
+					"413": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": { "default": 500, "type": "number" },
+										"error": { "type": "string" },
+										"message": { "type": "string" }
+									},
+									"required": ["status", "message"]
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": { "default": 500, "type": "number" },
+										"error": { "type": "string" },
+										"message": { "type": "string" }
+									},
+									"required": ["status", "message"]
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/v1/files/{fileId}": {
+			"delete": {
+				"operationId": "deleteFile",
+				"tags": ["file"],
+				"description": "Delete file content",
+				"parameters": [
+					{
+						"schema": { "type": "string" },
+						"in": "path",
+						"name": "fileId",
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"id": { "type": "string" },
+										"object": { "type": "string" },
+										"deleted": { "type": "boolean" }
+									},
+									"required": ["id", "object", "deleted"]
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": { "default": 500, "type": "number" },
+										"error": { "type": "string" },
+										"message": { "type": "string" }
+									},
+									"required": ["status", "message"]
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/v1/files/{fileId}/contents": {
+			"get": {
+				"operationId": "getFile",
+				"tags": ["file"],
+				"description": "Get file content",
+				"parameters": [
+					{
+						"schema": { "type": "string" },
+						"in": "path",
+						"name": "fileId",
+						"required": true
+					}
+				],
+				"responses": { "200": { "description": "Default Response" } }
+			}
+		},
+		"/v1/invoices": {
+			"post": {
+				"operationId": "createInvoice",
+				"tags": ["invoice"],
+				"description": "create new invoice",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"contact": { "type": "string" },
+									"due_date": { "format": "date", "type": "string" },
+									"invoice_date": { "format": "date", "type": "string" },
+									"notes": { "type": "string" },
+									"invoice_number": { "type": "string" },
+									"reference_number": { "type": "string" },
+									"template": { "type": "string" },
+									"items": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"name": { "type": "string" },
+												"price": { "minimum": 0, "type": "integer" },
+												"tax": { "minimum": 0, "type": "number" },
+												"quantity": { "minimum": 0, "type": "number" },
+												"description": { "type": "string" }
+											},
+											"required": ["name", "price", "tax", "quantity"]
+										}
+									}
+								},
+								"required": [
+									"contact",
+									"due_date",
+									"invoice_date",
+									"invoice_number",
+									"items"
+								]
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"201": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"id": { "type": "string" },
+										"invoice_number": { "type": "string" },
+										"reference_number": { "type": "string", "nullable": true },
+										"sub_total": { "type": "string" },
+										"tax_amount": { "type": "string" },
+										"total": { "type": "string" },
+										"invoice_date": { "format": "date-time", "type": "string" },
+										"due_date": { "format": "date-time", "type": "string" },
+										"currency": { "type": "string" },
+										"status": {
+											"anyOf": [
+												{ "type": "string", "enum": ["DISPUTED"] },
+												{ "type": "string", "enum": ["DRAFT"] },
+												{ "type": "string", "enum": ["SENT"] },
+												{ "type": "string", "enum": ["VIEWED"] },
+												{ "type": "string", "enum": ["OVERDUE"] },
+												{ "type": "string", "enum": ["PARTIALLY_PAID"] },
+												{ "type": "string", "enum": ["PAID"] },
+												{ "type": "string", "enum": ["FAILED"] }
+											]
+										},
+										"notes": { "type": "string", "nullable": true },
+										"items": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"id": { "type": "string" },
+													"name": { "type": "string" },
+													"price": { "type": "string" },
+													"quantity": { "type": "string" },
+													"tax": { "type": "string" },
+													"tax_amount": { "type": "string" },
+													"sub_total": { "type": "string" },
+													"total": { "type": "string" },
+													"description": { "type": "string", "nullable": true }
+												},
+												"required": [
+													"id",
+													"name",
+													"price",
+													"quantity",
+													"tax",
+													"tax_amount",
+													"sub_total",
+													"total",
+													"description"
+												]
+											}
+										},
+										"contact": {
+											"type": "object",
+											"properties": {
+												"id": { "type": "string" },
+												"name": { "type": "string" },
+												"email": { "type": "string" },
+												"phone": { "type": "string", "nullable": true },
+												"vat": { "type": "string" },
+												"website": { "type": "string", "nullable": true },
+												"billing_address": {
+													"type": "object",
+													"properties": {
+														"id": { "type": "string" },
+														"name": { "type": "string", "nullable": true },
+														"line_1": { "type": "string" },
+														"line_2": { "type": "string", "nullable": true },
+														"city": { "type": "string" },
+														"postal_code": { "type": "string" },
+														"state": { "type": "string", "nullable": true },
+														"country": { "type": "string" },
+														"geo": {}
+													},
+													"required": [
+														"id",
+														"name",
+														"line_1",
+														"line_2",
+														"city",
+														"postal_code",
+														"state",
+														"country",
+														"geo"
+													],
+													"nullable": true
+												},
+												"shipping_address": {
+													"type": "object",
+													"properties": {
+														"id": { "type": "string" },
+														"name": { "type": "string", "nullable": true },
+														"line_1": { "type": "string" },
+														"line_2": { "type": "string", "nullable": true },
+														"city": { "type": "string" },
+														"postal_code": { "type": "string" },
+														"state": { "type": "string", "nullable": true },
+														"country": { "type": "string" },
+														"geo": {}
+													},
+													"required": [
+														"id",
+														"name",
+														"line_1",
+														"line_2",
+														"city",
+														"postal_code",
+														"state",
+														"country",
+														"geo"
+													],
+													"nullable": true
+												}
+											},
+											"required": [
+												"id",
+												"name",
+												"email",
+												"phone",
+												"vat",
+												"website",
+												"billing_address",
+												"shipping_address"
+											]
+										},
+										"document": {
+											"type": "object",
+											"properties": {
+												"id": { "type": "string" },
+												"file_name": { "type": "string" },
+												"url": { "type": "string" }
+											},
+											"required": ["id", "file_name", "url"]
+										}
+									},
+									"required": [
+										"id",
+										"invoice_number",
+										"reference_number",
+										"sub_total",
+										"tax_amount",
+										"total",
+										"invoice_date",
+										"due_date",
+										"currency",
+										"status",
+										"notes",
+										"items",
+										"contact",
+										"document"
+									]
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": { "default": 500, "type": "number" },
+										"error": { "type": "string" },
+										"message": { "type": "string" }
+									},
+									"required": ["status", "message"]
+								}
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "listInvoices",
+				"tags": ["invoice"],
+				"description": "list all invoices",
+				"parameters": [
+					{
+						"schema": { "type": "string" },
+						"in": "query",
+						"name": "sort",
+						"required": false
+					},
+					{
+						"schema": { "default": 0, "type": "number" },
+						"in": "query",
+						"name": "page",
+						"required": false
+					},
+					{
+						"schema": { "default": 25, "maximum": 50, "type": "number" },
+						"in": "query",
+						"name": "per_page",
+						"required": false
+					},
+					{
+						"schema": { "type": "string" },
+						"in": "query",
+						"name": "search",
+						"required": false
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"object": { "type": "string" },
+										"has_more": { "type": "boolean" },
+										"total": { "type": "integer" },
+										"items": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"id": { "type": "string" },
+													"invoice_number": { "type": "string" },
+													"total": { "type": "string" },
+													"due_date": {
+														"format": "date-time",
+														"type": "string"
+													},
+													"currency": { "type": "string" },
+													"status": {
+														"anyOf": [
+															{ "type": "string", "enum": ["DISPUTED"] },
+															{ "type": "string", "enum": ["DRAFT"] },
+															{ "type": "string", "enum": ["SENT"] },
+															{ "type": "string", "enum": ["VIEWED"] },
+															{ "type": "string", "enum": ["OVERDUE"] },
+															{ "type": "string", "enum": ["PARTIALLY_PAID"] },
+															{ "type": "string", "enum": ["PAID"] },
+															{ "type": "string", "enum": ["FAILED"] }
+														]
+													},
+													"contact": {
+														"type": "object",
+														"properties": {
+															"id": { "type": "string" },
+															"name": { "type": "string" },
+															"email": { "type": "string" }
+														},
+														"required": ["id", "name", "email"]
+													}
+												},
+												"required": [
+													"id",
+													"invoice_number",
+													"total",
+													"due_date",
+													"currency",
+													"status",
+													"contact"
+												]
+											}
+										}
+									},
+									"required": ["object", "has_more", "total", "items"]
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": { "default": 500, "type": "number" },
+										"error": { "type": "string" },
+										"message": { "type": "string" }
+									},
+									"required": ["status", "message"]
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/v1/invoices/{invoiceId}": {
+			"get": {
+				"operationId": "getInvoice",
+				"tags": ["invoice"],
+				"description": "get invoice",
+				"parameters": [
+					{
+						"schema": { "type": "string" },
+						"in": "path",
+						"name": "invoiceId",
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"id": { "type": "string" },
+										"invoice_number": { "type": "string" },
+										"reference_number": { "type": "string", "nullable": true },
+										"sub_total": { "type": "string" },
+										"tax_amount": { "type": "string" },
+										"total": { "type": "string" },
+										"invoice_date": { "format": "date-time", "type": "string" },
+										"due_date": { "format": "date-time", "type": "string" },
+										"currency": { "type": "string" },
+										"status": {
+											"anyOf": [
+												{ "type": "string", "enum": ["DISPUTED"] },
+												{ "type": "string", "enum": ["DRAFT"] },
+												{ "type": "string", "enum": ["SENT"] },
+												{ "type": "string", "enum": ["VIEWED"] },
+												{ "type": "string", "enum": ["OVERDUE"] },
+												{ "type": "string", "enum": ["PARTIALLY_PAID"] },
+												{ "type": "string", "enum": ["PAID"] },
+												{ "type": "string", "enum": ["FAILED"] }
+											]
+										},
+										"notes": { "type": "string", "nullable": true },
+										"items": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"id": { "type": "string" },
+													"name": { "type": "string" },
+													"price": { "type": "string" },
+													"quantity": { "type": "string" },
+													"tax": { "type": "string" },
+													"tax_amount": { "type": "string" },
+													"sub_total": { "type": "string" },
+													"total": { "type": "string" },
+													"description": { "type": "string", "nullable": true }
+												},
+												"required": [
+													"id",
+													"name",
+													"price",
+													"quantity",
+													"tax",
+													"tax_amount",
+													"sub_total",
+													"total",
+													"description"
+												]
+											}
+										},
+										"contact": {
+											"type": "object",
+											"properties": {
+												"id": { "type": "string" },
+												"name": { "type": "string" },
+												"email": { "type": "string" },
+												"phone": { "type": "string", "nullable": true },
+												"vat": { "type": "string" },
+												"website": { "type": "string", "nullable": true },
+												"billing_address": {
+													"type": "object",
+													"properties": {
+														"id": { "type": "string" },
+														"name": { "type": "string", "nullable": true },
+														"line_1": { "type": "string" },
+														"line_2": { "type": "string", "nullable": true },
+														"city": { "type": "string" },
+														"postal_code": { "type": "string" },
+														"state": { "type": "string", "nullable": true },
+														"country": { "type": "string" },
+														"geo": {}
+													},
+													"required": [
+														"id",
+														"name",
+														"line_1",
+														"line_2",
+														"city",
+														"postal_code",
+														"state",
+														"country",
+														"geo"
+													],
+													"nullable": true
+												},
+												"shipping_address": {
+													"type": "object",
+													"properties": {
+														"id": { "type": "string" },
+														"name": { "type": "string", "nullable": true },
+														"line_1": { "type": "string" },
+														"line_2": { "type": "string", "nullable": true },
+														"city": { "type": "string" },
+														"postal_code": { "type": "string" },
+														"state": { "type": "string", "nullable": true },
+														"country": { "type": "string" },
+														"geo": {}
+													},
+													"required": [
+														"id",
+														"name",
+														"line_1",
+														"line_2",
+														"city",
+														"postal_code",
+														"state",
+														"country",
+														"geo"
+													],
+													"nullable": true
+												}
+											},
+											"required": [
+												"id",
+												"name",
+												"email",
+												"phone",
+												"vat",
+												"website",
+												"billing_address",
+												"shipping_address"
+											]
+										},
+										"document": {
+											"type": "object",
+											"properties": {
+												"id": { "type": "string" },
+												"file_name": { "type": "string" },
+												"url": { "type": "string" }
+											},
+											"required": ["id", "file_name", "url"]
+										}
+									},
+									"required": [
+										"id",
+										"invoice_number",
+										"reference_number",
+										"sub_total",
+										"tax_amount",
+										"total",
+										"invoice_date",
+										"due_date",
+										"currency",
+										"status",
+										"notes",
+										"items",
+										"contact",
+										"document"
+									]
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": { "default": 500, "type": "number" },
+										"error": { "type": "string" },
+										"message": { "type": "string" }
+									},
+									"required": ["status", "message"]
+								}
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "deleteInvoice",
+				"tags": ["invoice"],
+				"description": "delete invoice",
+				"parameters": [
+					{
+						"schema": { "type": "string" },
+						"in": "path",
+						"name": "invoiceId",
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"id": { "type": "string" },
+										"object": { "type": "string" },
+										"deleted": { "type": "boolean" }
+									},
+									"required": ["id", "object", "deleted"]
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": { "default": 500, "type": "number" },
+										"error": { "type": "string" },
+										"message": { "type": "string" }
+									},
+									"required": ["status", "message"]
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/v1/invoices/{invoiceId}/send": {
+			"post": {
+				"operationId": "sendInvoice",
+				"tags": ["invoice"],
+				"description": "send invoice",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"mark_sent": { "type": "boolean" },
+									"resend": { "type": "boolean" }
+								}
+							}
+						}
+					}
+				},
+				"parameters": [
+					{
+						"schema": { "type": "string" },
+						"in": "path",
+						"name": "invoiceId",
+						"required": true
+					}
+				],
+				"responses": {
+					"500": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": { "default": 500, "type": "number" },
+										"error": { "type": "string" },
+										"message": { "type": "string" }
+									},
+									"required": ["status", "message"]
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/v1/invoices/number": {
+			"get": {
+				"operationId": "nextInvoiceNumber",
+				"tags": ["invoice"],
+				"description": "get next invoice number",
+				"responses": {
+					"200": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": { "number": { "type": "string" } },
+									"required": ["number"]
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": { "default": 500, "type": "number" },
+										"error": { "type": "string" },
+										"message": { "type": "string" }
+									},
+									"required": ["status", "message"]
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/v1/invoices/preview": {
+			"post": {
+				"operationId": "getInvoicePreview",
+				"tags": ["invoice"],
+				"description": "get invoice preview",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"contact": { "type": "string" },
+									"due_date": { "format": "date", "type": "string" },
+									"invoice_date": { "format": "date", "type": "string" },
+									"notes": { "type": "string" },
+									"invoice_number": { "type": "string" },
+									"reference_number": { "type": "string" },
+									"template": { "type": "string" },
+									"items": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"name": { "type": "string" },
+												"price": { "minimum": 0, "type": "integer" },
+												"tax": { "minimum": 0, "type": "number" },
+												"quantity": { "minimum": 0, "type": "number" },
+												"description": { "type": "string" }
+											},
+											"required": ["name", "price", "tax", "quantity"]
+										}
+									}
+								},
+								"required": [
+									"contact",
+									"due_date",
+									"invoice_date",
+									"invoice_number",
+									"items"
+								]
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": { "200": { "description": "Default Response" } }
+			}
+		},
+		"/v1/expenses": {
+			"post": {
+				"operationId": "createExpense",
+				"tags": ["expense"],
+				"description": "create new expense",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"contact": { "type": "string" },
+									"status": {
+										"anyOf": [
+											{ "type": "string", "enum": ["DISPUTED"] },
+											{ "type": "string", "enum": ["OVERDUE"] },
+											{ "type": "string", "enum": ["UNPAID"] },
+											{ "type": "string", "enum": ["PARTIALLY_PAID"] },
+											{ "type": "string", "enum": ["PAID"] },
+											{ "type": "string", "enum": ["FAILED"] }
+										]
+									},
+									"currency": { "type": "string" },
+									"paid_amount": { "minimum": 0, "type": "integer" },
+									"notes": { "type": "string" },
+									"terms": { "type": "string" },
+									"expense_date": { "format": "date", "type": "string" },
+									"due_date": { "format": "date", "type": "string" },
+									"paid_date": { "format": "date", "type": "string" },
+									"document": { "type": "string" },
+									"items": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"category": { "type": "string" },
+												"description": { "type": "string" },
+												"metadata": { "type": "object", "properties": {} },
+												"sub_total": { "minimum": 0, "type": "integer" },
+												"total": { "minimum": 0, "type": "integer" }
+											},
+											"required": ["category", "sub_total", "total"]
+										}
+									}
+								},
+								"required": [
+									"contact",
+									"status",
+									"currency",
+									"expense_date",
+									"items"
+								]
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"201": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"id": { "type": "string" },
+										"sub_total": { "type": "string" },
+										"tax_amount": { "type": "string" },
+										"total": { "type": "string" },
+										"due_date": {
+											"format": "date-time",
+											"type": "string",
+											"nullable": true
+										},
+										"currency": { "type": "string" },
+										"status": {
+											"DISPUTED": "DISPUTED",
+											"OVERDUE": "OVERDUE",
+											"UNPAID": "UNPAID",
+											"PARTIALLY_PAID": "PARTIALLY_PAID",
+											"PAID": "PAID",
+											"FAILED": "FAILED",
+											"type": "string"
+										},
+										"notes": { "type": "string", "nullable": true },
+										"terms": { "type": "string", "nullable": true },
+										"contact": {
+											"type": "object",
+											"properties": {
+												"id": { "type": "string" },
+												"name": { "type": "string" },
+												"email": { "type": "string" },
+												"phone": { "type": "string", "nullable": true },
+												"vat": { "type": "string" },
+												"website": { "type": "string", "nullable": true },
+												"billing_address": {
+													"type": "object",
+													"properties": {
+														"id": { "type": "string" },
+														"name": { "type": "string", "nullable": true },
+														"line_1": { "type": "string" },
+														"line_2": { "type": "string", "nullable": true },
+														"city": { "type": "string" },
+														"postal_code": { "type": "string" },
+														"state": { "type": "string", "nullable": true },
+														"country": { "type": "string" },
+														"geo": {}
+													},
+													"required": [
+														"id",
+														"name",
+														"line_1",
+														"line_2",
+														"city",
+														"postal_code",
+														"state",
+														"country",
+														"geo"
+													],
+													"nullable": true
+												},
+												"shipping_address": {
+													"type": "object",
+													"properties": {
+														"id": { "type": "string" },
+														"name": { "type": "string", "nullable": true },
+														"line_1": { "type": "string" },
+														"line_2": { "type": "string", "nullable": true },
+														"city": { "type": "string" },
+														"postal_code": { "type": "string" },
+														"state": { "type": "string", "nullable": true },
+														"country": { "type": "string" },
+														"geo": {}
+													},
+													"required": [
+														"id",
+														"name",
+														"line_1",
+														"line_2",
+														"city",
+														"postal_code",
+														"state",
+														"country",
+														"geo"
+													],
+													"nullable": true
+												}
+											},
+											"required": [
+												"id",
+												"name",
+												"email",
+												"phone",
+												"vat",
+												"website",
+												"billing_address",
+												"shipping_address"
+											]
+										},
+										"items": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"id": { "type": "string" },
+													"category": { "type": "string" },
+													"description": { "type": "string", "nullable": true },
+													"metadata": {
+														"type": "object",
+														"properties": {},
+														"nullable": true
+													},
+													"sub_total": { "type": "string" },
+													"total": { "type": "string" },
+													"tax_amount": { "type": "string" }
+												},
+												"required": [
+													"id",
+													"category",
+													"description",
+													"metadata",
+													"sub_total",
+													"total",
+													"tax_amount"
+												]
+											}
+										},
+										"document": {
+											"type": "object",
+											"properties": {
+												"id": { "type": "string" },
+												"file_name": { "type": "string" },
+												"url": { "type": "string" }
+											},
+											"required": ["id", "file_name", "url"],
+											"nullable": true
+										}
+									},
+									"required": [
+										"id",
+										"sub_total",
+										"tax_amount",
+										"total",
+										"due_date",
+										"currency",
+										"status",
+										"notes",
+										"terms",
+										"contact",
+										"items",
+										"document"
+									]
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": { "default": 500, "type": "number" },
+										"error": { "type": "string" },
+										"message": { "type": "string" }
+									},
+									"required": ["status", "message"]
+								}
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "listExpenses",
+				"tags": ["expense"],
+				"description": "list all expenses",
+				"parameters": [
+					{
+						"schema": { "type": "string" },
+						"in": "query",
+						"name": "sort",
+						"required": false
+					},
+					{
+						"schema": { "default": 0, "type": "number" },
+						"in": "query",
+						"name": "page",
+						"required": false
+					},
+					{
+						"schema": { "default": 25, "maximum": 50, "type": "number" },
+						"in": "query",
+						"name": "per_page",
+						"required": false
+					},
+					{
+						"schema": { "type": "string" },
+						"in": "query",
+						"name": "search",
+						"required": false
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"object": { "type": "string" },
+										"has_more": { "type": "boolean" },
+										"total": { "type": "integer" },
+										"items": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"id": { "type": "string" },
+													"total": { "type": "string" },
+													"currency": { "type": "string" },
+													"status": {
+														"DISPUTED": "DISPUTED",
+														"OVERDUE": "OVERDUE",
+														"UNPAID": "UNPAID",
+														"PARTIALLY_PAID": "PARTIALLY_PAID",
+														"PAID": "PAID",
+														"FAILED": "FAILED",
+														"type": "string"
+													},
+													"contact": {
+														"type": "object",
+														"properties": {
+															"id": { "type": "string" },
+															"name": { "type": "string" },
+															"email": { "type": "string" }
+														},
+														"required": ["id", "name", "email"]
+													}
+												},
+												"required": [
+													"id",
+													"total",
+													"currency",
+													"status",
+													"contact"
+												]
+											}
+										}
+									},
+									"required": ["object", "has_more", "total", "items"]
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": { "default": 500, "type": "number" },
+										"error": { "type": "string" },
+										"message": { "type": "string" }
+									},
+									"required": ["status", "message"]
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/v1/expenses/{expenseId}": {
+			"get": {
+				"operationId": "getExpense",
+				"tags": ["expense"],
+				"description": "get expense",
+				"parameters": [
+					{
+						"schema": { "type": "string" },
+						"in": "path",
+						"name": "expenseId",
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"id": { "type": "string" },
+										"sub_total": { "type": "string" },
+										"tax_amount": { "type": "string" },
+										"total": { "type": "string" },
+										"due_date": {
+											"format": "date-time",
+											"type": "string",
+											"nullable": true
+										},
+										"currency": { "type": "string" },
+										"status": {
+											"DISPUTED": "DISPUTED",
+											"OVERDUE": "OVERDUE",
+											"UNPAID": "UNPAID",
+											"PARTIALLY_PAID": "PARTIALLY_PAID",
+											"PAID": "PAID",
+											"FAILED": "FAILED",
+											"type": "string"
+										},
+										"notes": { "type": "string", "nullable": true },
+										"terms": { "type": "string", "nullable": true },
+										"contact": {
+											"type": "object",
+											"properties": {
+												"id": { "type": "string" },
+												"name": { "type": "string" },
+												"email": { "type": "string" },
+												"phone": { "type": "string", "nullable": true },
+												"vat": { "type": "string" },
+												"website": { "type": "string", "nullable": true },
+												"billing_address": {
+													"type": "object",
+													"properties": {
+														"id": { "type": "string" },
+														"name": { "type": "string", "nullable": true },
+														"line_1": { "type": "string" },
+														"line_2": { "type": "string", "nullable": true },
+														"city": { "type": "string" },
+														"postal_code": { "type": "string" },
+														"state": { "type": "string", "nullable": true },
+														"country": { "type": "string" },
+														"geo": {}
+													},
+													"required": [
+														"id",
+														"name",
+														"line_1",
+														"line_2",
+														"city",
+														"postal_code",
+														"state",
+														"country",
+														"geo"
+													],
+													"nullable": true
+												},
+												"shipping_address": {
+													"type": "object",
+													"properties": {
+														"id": { "type": "string" },
+														"name": { "type": "string", "nullable": true },
+														"line_1": { "type": "string" },
+														"line_2": { "type": "string", "nullable": true },
+														"city": { "type": "string" },
+														"postal_code": { "type": "string" },
+														"state": { "type": "string", "nullable": true },
+														"country": { "type": "string" },
+														"geo": {}
+													},
+													"required": [
+														"id",
+														"name",
+														"line_1",
+														"line_2",
+														"city",
+														"postal_code",
+														"state",
+														"country",
+														"geo"
+													],
+													"nullable": true
+												}
+											},
+											"required": [
+												"id",
+												"name",
+												"email",
+												"phone",
+												"vat",
+												"website",
+												"billing_address",
+												"shipping_address"
+											]
+										},
+										"items": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"id": { "type": "string" },
+													"category": { "type": "string" },
+													"description": { "type": "string", "nullable": true },
+													"metadata": {
+														"type": "object",
+														"properties": {},
+														"nullable": true
+													},
+													"sub_total": { "type": "string" },
+													"total": { "type": "string" },
+													"tax_amount": { "type": "string" }
+												},
+												"required": [
+													"id",
+													"category",
+													"description",
+													"metadata",
+													"sub_total",
+													"total",
+													"tax_amount"
+												]
+											}
+										},
+										"document": {
+											"type": "object",
+											"properties": {
+												"id": { "type": "string" },
+												"file_name": { "type": "string" },
+												"url": { "type": "string" }
+											},
+											"required": ["id", "file_name", "url"],
+											"nullable": true
+										}
+									},
+									"required": [
+										"id",
+										"sub_total",
+										"tax_amount",
+										"total",
+										"due_date",
+										"currency",
+										"status",
+										"notes",
+										"terms",
+										"contact",
+										"items",
+										"document"
+									]
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": { "default": 500, "type": "number" },
+										"error": { "type": "string" },
+										"message": { "type": "string" }
+									},
+									"required": ["status", "message"]
+								}
+							}
+						}
+					}
+				}
+			},
+			"put": {
+				"operationId": "updateExpense",
+				"tags": ["expense"],
+				"description": "update expense",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"contact": { "type": "string" },
+									"status": {
+										"anyOf": [
+											{ "type": "string", "enum": ["DISPUTED"] },
+											{ "type": "string", "enum": ["OVERDUE"] },
+											{ "type": "string", "enum": ["UNPAID"] },
+											{ "type": "string", "enum": ["PARTIALLY_PAID"] },
+											{ "type": "string", "enum": ["PAID"] },
+											{ "type": "string", "enum": ["FAILED"] }
+										]
+									},
+									"currency": { "type": "string" },
+									"paid_amount": { "minimum": 0, "type": "integer" },
+									"notes": { "type": "string" },
+									"terms": { "type": "string" },
+									"expense_date": { "format": "date", "type": "string" },
+									"due_date": { "format": "date", "type": "string" },
+									"paid_date": { "format": "date", "type": "string" },
+									"document": { "type": "string" },
+									"items": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"category": { "type": "string" },
+												"description": { "type": "string" },
+												"metadata": { "type": "object", "properties": {} },
+												"sub_total": { "minimum": 0, "type": "integer" },
+												"total": { "minimum": 0, "type": "integer" }
+											},
+											"required": ["category", "sub_total", "total"]
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"parameters": [
+					{
+						"schema": { "type": "string" },
+						"in": "path",
+						"name": "expenseId",
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"id": { "type": "string" },
+										"sub_total": { "type": "string" },
+										"tax_amount": { "type": "string" },
+										"total": { "type": "string" },
+										"due_date": {
+											"format": "date-time",
+											"type": "string",
+											"nullable": true
+										},
+										"currency": { "type": "string" },
+										"status": {
+											"DISPUTED": "DISPUTED",
+											"OVERDUE": "OVERDUE",
+											"UNPAID": "UNPAID",
+											"PARTIALLY_PAID": "PARTIALLY_PAID",
+											"PAID": "PAID",
+											"FAILED": "FAILED",
+											"type": "string"
+										},
+										"notes": { "type": "string", "nullable": true },
+										"terms": { "type": "string", "nullable": true },
+										"contact": {
+											"type": "object",
+											"properties": {
+												"id": { "type": "string" },
+												"name": { "type": "string" },
+												"email": { "type": "string" },
+												"phone": { "type": "string", "nullable": true },
+												"vat": { "type": "string" },
+												"website": { "type": "string", "nullable": true },
+												"billing_address": {
+													"type": "object",
+													"properties": {
+														"id": { "type": "string" },
+														"name": { "type": "string", "nullable": true },
+														"line_1": { "type": "string" },
+														"line_2": { "type": "string", "nullable": true },
+														"city": { "type": "string" },
+														"postal_code": { "type": "string" },
+														"state": { "type": "string", "nullable": true },
+														"country": { "type": "string" },
+														"geo": {}
+													},
+													"required": [
+														"id",
+														"name",
+														"line_1",
+														"line_2",
+														"city",
+														"postal_code",
+														"state",
+														"country",
+														"geo"
+													],
+													"nullable": true
+												},
+												"shipping_address": {
+													"type": "object",
+													"properties": {
+														"id": { "type": "string" },
+														"name": { "type": "string", "nullable": true },
+														"line_1": { "type": "string" },
+														"line_2": { "type": "string", "nullable": true },
+														"city": { "type": "string" },
+														"postal_code": { "type": "string" },
+														"state": { "type": "string", "nullable": true },
+														"country": { "type": "string" },
+														"geo": {}
+													},
+													"required": [
+														"id",
+														"name",
+														"line_1",
+														"line_2",
+														"city",
+														"postal_code",
+														"state",
+														"country",
+														"geo"
+													],
+													"nullable": true
+												}
+											},
+											"required": [
+												"id",
+												"name",
+												"email",
+												"phone",
+												"vat",
+												"website",
+												"billing_address",
+												"shipping_address"
+											]
+										},
+										"items": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"id": { "type": "string" },
+													"category": { "type": "string" },
+													"description": { "type": "string", "nullable": true },
+													"metadata": {
+														"type": "object",
+														"properties": {},
+														"nullable": true
+													},
+													"sub_total": { "type": "string" },
+													"total": { "type": "string" },
+													"tax_amount": { "type": "string" }
+												},
+												"required": [
+													"id",
+													"category",
+													"description",
+													"metadata",
+													"sub_total",
+													"total",
+													"tax_amount"
+												]
+											}
+										},
+										"document": {
+											"type": "object",
+											"properties": {
+												"id": { "type": "string" },
+												"file_name": { "type": "string" },
+												"url": { "type": "string" }
+											},
+											"required": ["id", "file_name", "url"],
+											"nullable": true
+										}
+									},
+									"required": [
+										"id",
+										"sub_total",
+										"tax_amount",
+										"total",
+										"due_date",
+										"currency",
+										"status",
+										"notes",
+										"terms",
+										"contact",
+										"items",
+										"document"
+									]
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": { "default": 500, "type": "number" },
+										"error": { "type": "string" },
+										"message": { "type": "string" }
+									},
+									"required": ["status", "message"]
+								}
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "deleteExpense",
+				"tags": ["expense"],
+				"description": "delete expense",
+				"parameters": [
+					{
+						"schema": { "type": "string" },
+						"in": "path",
+						"name": "expenseId",
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"id": { "type": "string" },
+										"object": { "type": "string" },
+										"deleted": { "type": "boolean" }
+									},
+									"required": ["id", "object", "deleted"]
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Default Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": { "default": 500, "type": "number" },
+										"error": { "type": "string" },
+										"message": { "type": "string" }
+									},
+									"required": ["status", "message"]
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"servers": [
+		{ "url": "http://localhost:5565", "description": "Localhost test server" }
+	]
+}
