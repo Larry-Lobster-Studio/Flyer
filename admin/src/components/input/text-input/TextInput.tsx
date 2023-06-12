@@ -1,40 +1,26 @@
-'use client';
+import { forwardRef, type InputHTMLAttributes } from 'react';
 
-import type { InputHTMLAttributes } from 'react';
+import { cn } from '@/lib/utils';
 
-import { forwardRef } from 'react';
-import clsx from 'clsx';
+export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {}
 
-import { InputWrapper } from '../input-wrapper';
-
-interface Props extends InputHTMLAttributes<HTMLInputElement> {
-	error?: React.ReactNode;
-	label: string;
-}
-
-const TextInput = forwardRef<HTMLInputElement, Props>((props, ref) => {
-	let { error, label, ...rest } = props;
-
-	return (
-		<InputWrapper
-			error={error}
-			label={label}
-			name={rest.name}
-			required={rest.required}
-		>
+export const TextInput = forwardRef<HTMLInputElement, InputProps>(
+	({ className, type, ...props }, ref) => {
+		return (
 			<input
-				ref={ref}
-				className={clsx(
-					'block w-full px-3 py-2 text-sm rounded-lg border border-lg border-flyer-gray/30 bg-white',
-					'focus:outline-none focus:border-flyer-gray focus:ring-flyer-graborder-flyer-gray',
-					error &&
-						'outline-none border-rose-600 focus:ring-rose-500 focus:border-rose-600'
+				type={type}
+				className={cn(
+					'flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background',
+					'file:border-0 file:bg-transparent file:text-sm file:font-medium',
+					'placeholder:text-muted-foreground',
+					'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+					'disabled:cursor-not-allowed disabled:opacity-50',
+					className
 				)}
-				{...rest}
+				ref={ref}
+				{...props}
 			/>
-		</InputWrapper>
-	);
-});
-
+		);
+	}
+);
 TextInput.displayName = 'TextInput';
-export default TextInput;

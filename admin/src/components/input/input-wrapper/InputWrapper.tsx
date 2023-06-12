@@ -1,41 +1,55 @@
-import type { FC, ReactNode } from 'react';
+import { HTMLAttributes, type FC, type ReactNode, forwardRef } from 'react';
 
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 
-interface Props {
+import { Label } from '@/components/label';
+
+export interface InputWrapperProps extends HTMLAttributes<HTMLDivElement> {
 	name?: string;
 	label: string;
 	required?: boolean;
 	children: ReactNode;
-	error?: ReactNode;
+	messages?: {
+		type: string;
+		text: string;
+	}[];
 }
 
-const InputWrapper: FC<Props> = ({
-	name,
-	label,
-	required = false,
-	children,
-	error,
-}) => {
-	return (
-		<div className={clsx('flex flex-col gap-y-2 w-full mb-4')}>
-			<label
-				htmlFor={name}
-				className={clsx(
-					'relative text-sm text-flyer-gray lowercase',
-					required && "after:content-['*'] after:ml-0.5 after:text-rose-500"
-				)}
+export const InputWrapper = forwardRef<HTMLDivElement, InputWrapperProps>(
+	({ className, name, label, required, children, messages, ...props }, ref) => {
+		return (
+			<div
+				ref={ref}
+				className={cn('grid items-center gap-1 w-full', className)}
+				{...props}
 			>
-				{label}
-			</label>
+				<Label
+					htmlFor={name}
+					className={cn(
+						'mb-1',
+						required && "after:content-['*'] after:ml-0.5 after:text-rose-500"
+					)}
+				>
+					{label}
+				</Label>
+				{children}
 
-			{children}
-
-			{error && (
-				<span className='text-sm lowercase text-rose-600'>{error}</span>
-			)}
-		</div>
-	);
-};
-
-export default InputWrapper;
+				<div className={cn('flex flex-col mt-1')}>
+					{messages?.map(({ text, type }, index) => {
+						return (
+							<span
+								key={index}
+								className={cn(
+									'text-sm text-muted-foreground',
+									type === 'error' && 'text-red-600'
+								)}
+							>
+								{text}
+							</span>
+						);
+					})}
+				</div>
+			</div>
+		);
+	}
+);
