@@ -2,7 +2,7 @@ import type { Dispatch, SetStateAction } from 'react';
 import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
 
 import { AxiosError } from 'axios';
-import toast from 'react-hot-toast';
+import { toast } from '@/components/toast';
 
 // A small function to help us deal with errors coming from fetching a flow.
 export function handleGetFlowError<S>(
@@ -23,23 +23,31 @@ export function handleGetFlowError<S>(
 				return;
 			case 'self_service_flow_return_to_forbidden':
 				// The flow expired, let's request a new one.
-				toast.error('The return_to address is not allowed.');
+				toast({
+					title: 'Forbidden return',
+					description: 'The return_to address is not allowed.',
+					variant: 'destructive',
+				});
 				resetFlow(undefined);
 				router.push('/' + flowType);
 				return;
 			case 'self_service_flow_expired':
 				// The flow expired, let's request a new one.
-				toast.error(
-					'Your interaction expired, please fill out the form again.'
-				);
+				toast({
+					title: 'Session expired',
+					description:
+						'Your interaction expired, please fill out the form again.',
+				});
 				resetFlow(undefined);
 				router.push('/' + flowType);
 				return;
 			case 'security_csrf_violation':
 				// A CSRF violation occurred. Best to just refresh the flow!
-				toast.error(
-					'A security violation was detected, please fill out the form again.'
-				);
+				toast({
+					title: 'Security violation',
+					description:
+						'A security violation was detected, please fill out the form again.',
+				});
 				resetFlow(undefined);
 				router.push('/' + flowType);
 				return;

@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import ory, { handleFlowError } from '@/lib/authentication';
 import { Flow } from '@/components/authentication';
 import { isAxiosError } from 'axios';
+import clsx from 'clsx';
 
 interface Props {
 	flow: SettingsFlow | undefined;
@@ -36,5 +37,29 @@ export default function SettingsForm({ flow, setFlow }: Props) {
 			});
 	};
 
-	return <Flow onSubmit={onSubmit} flow={flow} />;
+	return (
+		<div className={clsx('flex flex-col')}>
+			<div
+				className={clsx('mb-9 px-6 pt-6 pb-8 bg-white rounded-xl shadow-lg')}
+			>
+				<h3 className={clsx('mb-4')}> profile </h3>
+
+				<Flow onSubmit={onSubmit} flow={flow} only='profile' />
+			</div>
+			<div
+				className={clsx('mb-9 px-6 pt-6 pb-8 bg-white rounded-xl shadow-lg')}
+			>
+				<h3 className={clsx('mb-4')}> password </h3>
+
+				<Flow onSubmit={onSubmit} flow={flow} only='password' />
+			</div>
+			<div
+				className={clsx('mb-9 px-6 pt-6 pb-8 bg-white rounded-xl shadow-lg')}
+			>
+				<h3 className={clsx('mb-4')}> 2FA </h3>
+
+				<Flow onSubmit={onSubmit} flow={flow} only='totp' />
+			</div>
+		</div>
+	);
 }
